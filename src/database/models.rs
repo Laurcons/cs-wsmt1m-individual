@@ -1,9 +1,11 @@
 use diesel::prelude::*;
+use serde::Serialize;
 
-#[derive(Queryable, Selectable)]
-#[diesel(table_name = crate::database::schema::counter)]
+#[derive(Queryable, Selectable, Serialize)]
+#[diesel(table_name = crate::database::schema::todos)]
 #[diesel(check_for_backend(diesel::mysql::Mysql))]
-pub struct Counter {
+pub struct Todo {
   pub id: i32,
-  pub value: Option<i32>,
+  pub title: String,
+  pub is_done: bool,
 }

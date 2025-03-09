@@ -1,8 +1,10 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
-    counter (id) {
+    todos (id) {
         id -> Integer,
-        value -> Nullable<Integer>,
+        #[max_length = 1024]
+        title -> Varchar,
+        is_done -> Bool,
     }
 }
