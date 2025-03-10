@@ -1,18 +1,16 @@
-use std::env;
 
 use diesel::{
   MysqlConnection,
   r2d2::{ConnectionManager, Pool},
 };
-use dotenvy::dotenv;
+
+use crate::app_config::AppConfig;
 
 pub mod models;
 pub mod schema;
 
-pub fn connect_to_database() -> Pool<ConnectionManager<MysqlConnection>> {
-  dotenv().expect("Could not read env");
-
-  let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+pub fn connect_to_database(config: &AppConfig) -> Pool<ConnectionManager<MysqlConnection>> {
+  let database_url = config.database_url.clone();
 
   println!("Connecting to Mysql...");
 

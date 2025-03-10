@@ -1,5 +1,7 @@
 mod database;
 
+
+use app_config::AppConfig;
 use app_state::AppState;
 
 use axum::{Router, http::StatusCode, routing::get};
@@ -8,6 +10,7 @@ use tower::ServiceBuilder;
 use tower_http::trace::TraceLayer;
 use utils::middleware::log_middleware::log_request;
 
+mod app_config;
 mod app_state;
 mod handlers;
 mod services;
@@ -15,7 +18,8 @@ mod utils;
 
 #[tokio::main]
 async fn main() {
-  let state = AppState::new();
+  let config = AppConfig::new();
+  let state = AppState::new(&config);
 
   let app = Router::new()
     .route(
@@ -30,8 +34,10 @@ async fn main() {
     )
     .with_state(state);
 
-  // run our app with hyper, listening globally on port 3000
-  let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
+  let port = config.port;
+  let listener = tokio::net::TcpListener::bind(("0.0.0.0", port))
+    .await
+    .unwrap();
   println!("Listening");
   axum::serve(listener, app).await.unwrap();
 }
