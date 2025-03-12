@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-axum = { version = "0.8.1", features = ["macros"] }
+axum = { version = "0.8.1", features = ["macros", "query"] }
 tokio = { version = "1.43.0", features = ["macros", "rt-multi-thread"] }
 diesel = { version = "2.2.0", features = ["mysql", "r2d2"] }
 dotenvy = "0.15"

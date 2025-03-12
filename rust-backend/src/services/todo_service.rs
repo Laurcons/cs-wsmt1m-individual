@@ -15,6 +15,10 @@ pub struct TodoService {
   mysql: MysqlPool,
 }
 
+pub struct ListOptions {
+  pub is_done: Option<bool>,
+}
+
 pub struct CreateTodo {
   pub title: String,
 }
@@ -31,11 +35,15 @@ impl TodoService {
     TodoService { mysql }
   }
 
-  pub fn list(&self) -> Result<Vec<Todo>, Box<dyn Error>> {
+  pub fn list(&self, opts: ListOptions) -> Result<Vec<Todo>, Box<dyn Error>> {
     use schema::todos::dsl::*;
 
     let mut conn = self.mysql.get()?;
-    let listing = todos.filter(is_done.eq(false)).load::<Todo>(&mut conn)?;
+    let mut query = todos.into_boxed();
+    if let Some(isdone) = opts.is_done {
+      query = query.filter(is_done.eq(isdone));
+    }
+    let listing = query.load::<Todo>(&mut conn)?;
     Ok(listing)
   }
 
