@@ -15,7 +15,7 @@ use crate::{
 
 #[derive(Validate, Deserialize)]
 pub struct UpdateBody {
-  #[validate(length(max = 14, message = "Your title is too long!"))]
+  #[validate(length(max = 512, message = "Your title is too long!"))]
   title: Option<String>,
   is_done: Option<bool>,
 }
